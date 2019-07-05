@@ -14,7 +14,7 @@ import java.nio.file.Files;
  *
  * @author {CompanyName}
  */
-public class HttpRequests {
+class HttpRequests {
 
 
     // APIBase of PrintScreen-Clone
