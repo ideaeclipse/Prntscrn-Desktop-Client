@@ -132,6 +132,11 @@ class PrntscrnFrame extends JFrame {
         private final JButton upload = new JButton();
 
         /**
+         * A global storage of the fullscreen screenshot button
+         */
+        private final JButton fullscreen = new JButton();
+
+        /**
          * Point a is the point of initial click.
          * This variable is only updated on mouse click
          */
@@ -170,9 +175,13 @@ class PrntscrnFrame extends JFrame {
                     if (Math.max(a.y, b.y) < screenHeight - 200) {
                         upload.setLocation(Math.max(a.x, b.x) - 73, Math.max(a.y, b.y));
                         add(upload);
+                        fullscreen.setLocation(Math.max(a.x, b.x) - 73 * 2, Math.max(a.y, b.y));
+                        add(fullscreen);
                     } else {
                         upload.setLocation(Math.max(a.x, b.x) - 73, Math.max(a.y, b.y) - 25);
                         add(upload);
+                        fullscreen.setLocation(Math.max(a.x, b.x) - 73 * 2, Math.max(a.y, b.y));
+                        add(fullscreen);
                     }
                     repaint();
                 }
@@ -184,26 +193,51 @@ class PrntscrnFrame extends JFrame {
 
             //Called once the upload button is clicked
             Timer timer = new Timer(250, e -> {
-                if (!isVisible()) {
-                    try {
-                        File tempFile = File.createTempFile("image-", ".png");
-                        ImageIO.write(image.getSubimage(Math.min(a.x, b.x), Math.min(a.y, b.y), abs(a.x - b.x), abs(a.y - b.y)), "png", tempFile);
-                        String url = String.valueOf(new JSONObject(new HttpRequests().postImage(tempFile, "image", token)).get("uuid"));
-                        tempFile.deleteOnExit();
-                        Desktop.getDesktop().browse(new URI(url));
-                    } catch (URISyntaxException e1) {
-                        errorFrame.writeError("URLSyntax error, Please contact the one and only mayo!", e1, this.getClass());
-                    } catch (IOException e2) {
-                        errorFrame.writeError("One or both of the two following error(s) has occurred: Unable open connection or unable to upload image. Please contact the one and only mayo!", e2, this.getClass());
+                if(e.getSource() == upload) {
+                    if (!isVisible()) {
+                        try {
+                            File tempFile = File.createTempFile("image-", ".png");
+                            ImageIO.write(image.getSubimage(Math.min(a.x, b.x), Math.min(a.y, b.y), abs(a.x - b.x), abs(a.y - b.y)), "png", tempFile);
+                            String url = String.valueOf(new JSONObject(new HttpRequests().postImage(tempFile, "image", token)).get("uuid"));
+                            tempFile.deleteOnExit();
+                            Desktop.getDesktop().browse(new URI(url));
+                        } catch (URISyntaxException e1) {
+                            errorFrame.writeError("URLSyntax error, Please contact the one and only mayo!", e1, this.getClass());
+                        } catch (IOException e2) {
+                            errorFrame.writeError("One or both of the two following error(s) has occurred: Unable open connection or unable to upload image. Please contact the one and only mayo!", e2, this.getClass());
+                        }
                     }
-                    frame.dispose();
-                }
-            });
-            timer.setRepeats(false);
+                } else {
+                    if (!isVisible()) {
+                        try {
+                            File tempFile = File.createTempFile("image-", ".png");
+                            ImageIO.write(image, "png", tempFile);
+                            String url = String.valueOf(new JSONObject(new HttpRequests().postImage(tempFile, "image", token)).get("uuid"));
+                            tempFile.deleteOnExit();
+                            Desktop.getDesktop().browse(new URI(url));
+                        } catch (URISyntaxException e1) {
+                            errorFrame.writeError("URLSyntax error, Please contact the one and only mayo!", e1, this.getClass());
+                        } catch (IOException e2) {
+                            errorFrame.writeError("One or both of the two following error(s) has occurred: Unable open connection or unable to upload image. Please contact the one and only mayo!", e2, this.getClass());
+                        }
 
+                    }
+                }
+                frame.dispose();
+            });
+
+            timer.setRepeats(false);
             this.upload.setSize(75, 25);
             this.upload.setText("Upload");
             this.upload.addActionListener(e -> {
+                setVisible(false);
+                repaint();
+                timer.start();
+            });
+
+            this.fullscreen.setSize(75, 25);
+            this.fullscreen.setText("Upload");
+            this.fullscreen.addActionListener(e -> {
                 setVisible(false);
                 repaint();
                 timer.start();
