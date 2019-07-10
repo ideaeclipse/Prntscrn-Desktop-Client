@@ -69,7 +69,6 @@ class AuthenticationFrame extends JFrame {
 
 
     /**
-     * TODO: allow the user to hit enter instead of the submit button
      * This class displays the input boxes for the user to enter their username and password
      *
      * @author {CompanyName}
@@ -193,11 +192,9 @@ class AuthenticationFrame extends JFrame {
                 }
                 new Menu(errorFrame);
             } catch (IOException e1) {
-
                 JLabel invalid = new JLabel("Invalid username and password", JLabel.CENTER);
                 invalid.setVisible(false);
                 if (!invalid.isVisible()) {
-                    System.out.println("dfd");
                     invalid.setBounds(130, 75, 200, 50);
                     invalid.setForeground(Color.RED);
                     add(invalid);

@@ -44,8 +44,6 @@ class PrntscrnFrame extends JFrame {
                 if (g.getDefaultConfiguration().getBounds().getY() < minimumY)
                     minimumY = (int) g.getDefaultConfiguration().getBounds().getY();
             }
-            errorFrame.writeMessage("Minimum x value is: " + minimumX);
-            errorFrame.writeMessage("Minimum y value is: " + minimumY);
         }
 
         setLocation(minimumX, minimumY);

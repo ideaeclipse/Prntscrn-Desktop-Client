@@ -45,12 +45,12 @@ class RegisterFrame extends JFrame {
             int temp2 = 1;
             for(Map.Entry<String, JTextField> field : fields.entrySet()){
                 if(field.getKey().equals("Last name") || field.getKey().equals("First name")){
-                    field.getValue().setBounds(50 + 250 * temp++,100, 200,35);
+                    field.getValue().setBounds(75 + 250 * temp++,150, 200,35);
                     field.getValue().setBorder(BorderFactory.createLineBorder(Color.darkGray));
                     field.getValue().setBackground(Color.WHITE);
 
                 }else{
-                    field.getValue().setBounds(50, 100 + 50 * temp2 ++, 450, 35);
+                    field.getValue().setBounds(75, 150 + 50 * temp2 ++, 450, 35);
                     field.getValue().setBorder(BorderFactory.createLineBorder(Color.darkGray));
                     field.getValue().setBackground(Color.WHITE);
                 }
@@ -75,17 +75,18 @@ class RegisterFrame extends JFrame {
                 });
             }
 
-            // JButton
+            // Back button to go back to login
             JButton back = new JButton("Back");
-            back.setBounds(50, 300, 100,35);
+            back.setBounds(75, 350, 100,35);
             back.addActionListener(e ->{
                 parent.dispose();
                 loginFrame.setVisible(true);
             });
-
             this.add(back);
+
+            // Submit button for registering account
             JButton submit = new JButton("submit");
-            submit.setBounds(400, 300, 100,35);
+            submit.setBounds(425, 350, 100,35);
             submit.addActionListener(e->{
                 JSONObject register = new JSONObject();
                 register.put("username", fields.get("Username"));
@@ -94,12 +95,20 @@ class RegisterFrame extends JFrame {
                 //register.put("LastName", fields.get("LastName"));
                 //register.put("Email", fields.get("Email"));
                 try {
-                    int statusCode = new HttpRequests().Register("user", register);
+                    int statusCode = Integer.parseInt(new HttpRequests().sendJson("user", register));
                     if(statusCode == 200){
                         parent.dispose();
                         loginFrame.setVisible(true);
                     }else if(statusCode == 401){
-
+                        JLabel error = new JLabel("The username has already been taken", JLabel.CENTER);
+                        error.setLayout(new BorderLayout());
+                        error.setBounds(118,90, 350,75);
+                        error.setFont(new Font(("Aerial"),Font.PLAIN, 14));
+                        error.setForeground(Color.RED);
+                        this.repaint();
+                        this.add(error);
+                        error.setVisible(true);
+                        errorFrame.writeError("User has enter a existing username", null, this.getClass());
                     }else{
 
                     }

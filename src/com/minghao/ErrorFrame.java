@@ -3,8 +3,15 @@ package com.minghao;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * This class is used to display any message to the debug console
@@ -12,16 +19,18 @@ import java.util.logging.Logger;
  *
  * @author {CompanyName}
  */
-public class ErrorFrame extends JFrame {
+class ErrorFrame extends JFrame {
     /**
-     * The textbox which displays the messages
+     * The Text box which displays the messages
      */
     private static JTextArea box;
 
+    private FileHandler FH = null;
+
     /**
-     * Sets up the jframe
+     * Sets up the JFrame
      */
-    public ErrorFrame() {
+    ErrorFrame() {
         super("Debug Console");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -30,6 +39,12 @@ public class ErrorFrame extends JFrame {
 
         // JPanel
         add(new ErrorPanel(this));
+
+        try {
+            FH = new FileHandler("errorDump\\" + new SimpleDateFormat("yyyy_MM_dd HH_mm_ss").format(new Date()) + ".txt", true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -49,16 +64,11 @@ public class ErrorFrame extends JFrame {
         // Writing the log to the Text file
         Logger logger = Logger.getLogger(aClass != null ? aClass.toString() : "unknown");
         logger.log(Level.SEVERE, message, e);
-        /*
-        try {
-            FileHandler FH = new FileHandler(aClass != null ? aClass.toString() + ".txt" : "unknown.txt");
-            logger.addHandler(FH);
-            SimpleFormatter formatter = new SimpleFormatter();
-            FH.setFormatter(formatter);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        */
+
+        logger.addHandler(FH);
+        SimpleFormatter formatter = new SimpleFormatter();
+        FH.setFormatter(formatter);
+
 
     }
 

@@ -2,6 +2,7 @@ package com.minghao;
 
 
 import org.json.JSONObject;
+
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.URL;
@@ -47,19 +48,11 @@ class HttpRequests {
         OutputStream os = con.getOutputStream();
         os.write(Object.toString().getBytes(StandardCharsets.UTF_8));
         os.close();
-        return printOutputStream(con.getInputStream());
-    }
+        if (url.equals("login"))
+            return printOutputStream(con.getInputStream());
+        else
+            return String.valueOf(con.getResponseCode());
 
-    int Register(final String url, final JSONObject object) throws IOException{
-        HttpsURLConnection con = openConnection(new URL(APIBASE + url));
-        con.setDoOutput(true);
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-        con.setRequestProperty("Accept", "application/json");
-        OutputStream os = con.getOutputStream();
-        os.write(object.toString().getBytes(StandardCharsets.UTF_8));
-        os.close();
-        return con.getResponseCode();
     }
 
     /**

@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 
 /**
  * TODO: rename package to com.{CompanyName}.client
- * TODO: rearrange installer to separate dir, and package name to com.{CompanyName}.installer
  * Entry point for the program.
  * This class will start the 2 required listeners, mouse and keyboard, see {@link Main#Main()}
  *
@@ -147,6 +146,7 @@ public class Main {
      * @throws NativeHookException If the program can't access the native keyboard/mouse listener functions
      */
     private Main() throws NativeHookException {
+        AuthenticationFrame authFrame = new AuthenticationFrame(errorFrame);
         GlobalScreen.registerNativeHook();
         Logger.getLogger(GlobalScreen.class.getPackage().getName()).setLevel(Level.OFF);
         GlobalScreen.addNativeKeyListener(new NativeKeyListener() {
@@ -163,7 +163,7 @@ public class Main {
              */
             @Override
             public void nativeKeyPressed(final NativeKeyEvent nativeKeyEvent) {
-                if (nativeKeyEvent.getKeyCode() == NativeKeyEvent.VC_PRINTSCREEN) {
+                if (nativeKeyEvent.getKeyCode() == NativeKeyEvent.VC_PRINTSCREEN && !authFrame.isVisible()) {
                     if (frame == null || !frame.isVisible()) {
                         try {
                             if (token == null)
@@ -193,7 +193,7 @@ public class Main {
 
 
         if (checkToken() != 200)
-            token = new AuthenticationFrame(errorFrame).getToken();
+            token = authFrame.getToken();
         else {
             new Menu(errorFrame);
         }
