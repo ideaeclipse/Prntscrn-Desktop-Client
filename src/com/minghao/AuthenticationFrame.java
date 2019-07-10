@@ -92,13 +92,20 @@ class AuthenticationFrame extends JFrame {
         AuthenticationPanel(final JFrame parent) {
             // Panel information
             this.setLayout(null);
-            this.setBackground(Color.lightGray);
+            this.setBackground(Color.LIGHT_GRAY);
+
+            // Icon
+            JLabel icon = new JLabel(new ImageIcon("PrintScreen-Clone.png"));
+            icon.setBounds(185, 0, 100, 50);
+            this.add(icon);
+            this.repaint();
+            icon.setVisible(true);
 
             // Username JTextField
             userName = new JTextField("Username");
-            userName.setBounds(150, 145, 200, 35);
-            userName.setBorder(BorderFactory.createLineBorder(Color.blue));
-            userName.setBackground(Color.lightGray);
+            userName.setBounds(25, 125, 450, 35);
+            userName.setBorder(BorderFactory.createLineBorder(Color.darkGray));
+            userName.setBackground(Color.WHITE);
             userName.addKeyListener(new KeyListener() {
                 @Override
                 public void keyTyped(KeyEvent e) {
@@ -107,7 +114,9 @@ class AuthenticationFrame extends JFrame {
 
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    if (userName.getText().equals("Username"))
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                        test(parent);
+                    if (userName.getText().equals("Username") && e.getKeyCode() != KeyEvent.VK_ENTER)
                         userName.setText("");
                 }
 
@@ -120,9 +129,9 @@ class AuthenticationFrame extends JFrame {
 
             // Password JTextField
             password = new JTextField("Password");
-            password.setBounds(150, 185, 200, 35);
-            password.setBorder(BorderFactory.createLineBorder(Color.blue));
-            password.setBackground(Color.lightGray);
+            password.setBounds(25, 165, 450, 35);
+            password.setBorder(BorderFactory.createLineBorder(Color.darkGray));
+            password.setBackground(Color.white);
             password.addKeyListener(new KeyListener() {
                 @Override
                 public void keyTyped(KeyEvent e) {
@@ -130,8 +139,12 @@ class AuthenticationFrame extends JFrame {
 
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    if (password.getText().equals("Password"))
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                        test(parent);
+                    if (userName.getText().equals("Username") && e.getKeyCode() != KeyEvent.VK_ENTER)
                         password.setText("");
+
+
                 }
 
                 @Override
@@ -142,38 +155,59 @@ class AuthenticationFrame extends JFrame {
             this.add(password);
 
             // JButton
-            submit = new JButton("Submit");
-            submit.setBounds(200, 225, 100, 35);
+            submit = new JButton("Login");
+            submit.setBounds(375, 205, 100, 35);
 
             //Notifies the synchronized lock when the token is gathered
             submit.addActionListener(e -> {
-                try {
-                    String userName = getUserNameText();
-                    String password = getPasswordText();
-                    JSONObject login = new JSONObject();
-                    login.put("username", userName);
-                    login.put("password", password);
-                    HttpRequests con = new HttpRequests();
-                    token = String.valueOf(new JSONObject(con.sendJson("login", login)).get("token"));
-                    writeToken();
-                    parent.dispose();
-                    synchronized (this) {
-                        this.notifyAll();
-                    }
-                    new Menu(errorFrame);
-                } catch (IOException e1) {
-                    JLabel invalid = new JLabel("Invalid username and password", JLabel.CENTER);
-                    if (!invalid.isVisible()) {
-                        invalid.setBounds(150, 300, 200, 150);
-                        invalid.setForeground(Color.RED);
-                        add(invalid);
-                        this.repaint();
-                        errorFrame.writeError("The user has enter an invalid password, if you do not have an username or password; please contact the one and only mayo", e1, this.getClass());
-                    }
-                }
+                test(parent);
             });
+
             this.add(submit);
+
+
+            // Register button
+            JButton register = new JButton("Register");
+            register.setBounds(25, 205, 100, 35);
+            register.addActionListener(e -> {
+                parent.setVisible(false);
+                new RegisterFrame(parent, errorFrame);
+            });
+            this.add(register);
         }
+
+
+        void test(final JFrame parent) {
+            try {
+                String userName = getUserNameText();
+                String password = getPasswordText();
+                JSONObject login = new JSONObject();
+                login.put("username", userName);
+                login.put("password", password);
+                HttpRequests con = new HttpRequests();
+                token = String.valueOf(new JSONObject(con.sendJson("login", login)).get("token"));
+                writeToken();
+                parent.dispose();
+                synchronized (this) {
+                    this.notifyAll();
+                }
+                new Menu(errorFrame);
+            } catch (IOException e1) {
+
+                JLabel invalid = new JLabel("Invalid username and password", JLabel.CENTER);
+                invalid.setVisible(false);
+                if (!invalid.isVisible()) {
+                    System.out.println("dfd");
+                    invalid.setBounds(130, 75, 200, 50);
+                    invalid.setForeground(Color.RED);
+                    add(invalid);
+                    this.repaint();
+                    invalid.setVisible(true);
+                    errorFrame.writeError("The user has enter an invalid password, if you do not have an username or password; please contact the one and only mayo", e1, this.getClass());
+                }
+            }
+        }
+
 
         /**
          * Write the token to file

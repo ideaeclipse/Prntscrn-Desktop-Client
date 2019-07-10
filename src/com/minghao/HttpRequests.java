@@ -50,6 +50,18 @@ class HttpRequests {
         return printOutputStream(con.getInputStream());
     }
 
+    int Register(final String url, final JSONObject object) throws IOException{
+        HttpsURLConnection con = openConnection(new URL(APIBASE + url));
+        con.setDoOutput(true);
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        con.setRequestProperty("Accept", "application/json");
+        OutputStream os = con.getOutputStream();
+        os.write(object.toString().getBytes(StandardCharsets.UTF_8));
+        os.close();
+        return con.getResponseCode();
+    }
+
     /**
      * Check if existing token still valid
      *

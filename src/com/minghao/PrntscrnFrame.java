@@ -193,37 +193,23 @@ class PrntscrnFrame extends JFrame {
 
             //Called once the upload button is clicked
             Timer timer = new Timer(250, e -> {
-                if(e.getSource() == upload) {
-                    if (!isVisible()) {
-                        try {
-                            File tempFile = File.createTempFile("image-", ".png");
+                if (!isVisible()) {
+                    try {
+                        File tempFile = File.createTempFile("image-", ".png");
+                        if (e.getSource() == upload)
                             ImageIO.write(image.getSubimage(Math.min(a.x, b.x), Math.min(a.y, b.y), abs(a.x - b.x), abs(a.y - b.y)), "png", tempFile);
-                            String url = String.valueOf(new JSONObject(new HttpRequests().postImage(tempFile, "image", token)).get("uuid"));
-                            tempFile.deleteOnExit();
-                            Desktop.getDesktop().browse(new URI(url));
-                        } catch (URISyntaxException e1) {
-                            errorFrame.writeError("URLSyntax error, Please contact the one and only mayo!", e1, this.getClass());
-                        } catch (IOException e2) {
-                            errorFrame.writeError("One or both of the two following error(s) has occurred: Unable open connection or unable to upload image. Please contact the one and only mayo!", e2, this.getClass());
-                        }
-                    }
-                } else {
-                    if (!isVisible()) {
-                        try {
-                            File tempFile = File.createTempFile("image-", ".png");
+                        else
                             ImageIO.write(image, "png", tempFile);
-                            String url = String.valueOf(new JSONObject(new HttpRequests().postImage(tempFile, "image", token)).get("uuid"));
-                            tempFile.deleteOnExit();
-                            Desktop.getDesktop().browse(new URI(url));
-                        } catch (URISyntaxException e1) {
-                            errorFrame.writeError("URLSyntax error, Please contact the one and only mayo!", e1, this.getClass());
-                        } catch (IOException e2) {
-                            errorFrame.writeError("One or both of the two following error(s) has occurred: Unable open connection or unable to upload image. Please contact the one and only mayo!", e2, this.getClass());
-                        }
-
+                        String url = String.valueOf(new JSONObject(new HttpRequests().postImage(tempFile, "image", token)).get("uuid"));
+                        tempFile.deleteOnExit();
+                        Desktop.getDesktop().browse(new URI(url));
+                    } catch (URISyntaxException e1) {
+                        errorFrame.writeError("URLSyntax error, Please contact the one and only mayo!", e1, this.getClass());
+                    } catch (IOException e2) {
+                        errorFrame.writeError("One or both of the two following error(s) has occurred: Unable open connection or unable to upload image. Please contact the one and only mayo!", e2, this.getClass());
                     }
+                    frame.dispose();
                 }
-                frame.dispose();
             });
 
             timer.setRepeats(false);
@@ -236,7 +222,7 @@ class PrntscrnFrame extends JFrame {
             });
 
             this.fullscreen.setSize(75, 25);
-            this.fullscreen.setText("Upload");
+            this.fullscreen.setText("Fullscreen Upload");
             this.fullscreen.addActionListener(e -> {
                 setVisible(false);
                 repaint();
