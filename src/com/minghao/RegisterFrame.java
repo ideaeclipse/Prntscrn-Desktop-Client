@@ -22,13 +22,13 @@ class RegisterFrame extends JFrame {
         setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
         setResizable(false);
 
-        add(new RegisterPanel(loginFrame, errorFrame, this));
+        add(new RegisterPanel(loginFrame, this));
         this.setVisible(true);
     }
 
     private final class RegisterPanel extends JPanel {
 
-        RegisterPanel(final JFrame loginFrame, final ErrorFrame errorFrame, final JFrame parent) {
+        RegisterPanel(final JFrame loginFrame, final JFrame parent) {
             this.setLayout(null);
             this.setBackground(Color.LIGHT_GRAY);
 

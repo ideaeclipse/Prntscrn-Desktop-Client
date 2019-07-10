@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 import static java.lang.Math.abs;
 
 /**
- * This class is used to display the freezed image and allow the user to select a sub-region to capture and upload
+ * This class is used to display the freeze image and allow the user to select a sub-region to capture and upload
  * <p>
  * This class is called from {@link Main#createFrame()}
  *
@@ -202,9 +202,9 @@ class PrntscrnFrame extends JFrame {
                         tempFile.deleteOnExit();
                         Desktop.getDesktop().browse(new URI(url));
                     } catch (URISyntaxException e1) {
-                        errorFrame.writeError("URLSyntax error, Please contact the one and only mayo!", e1, this.getClass());
+                        errorFrame.writeError("URLSyntax error", e1, this.getClass());
                     } catch (IOException e2) {
-                        errorFrame.writeError("One or both of the two following error(s) has occurred: Unable open connection or unable to upload image. Please contact the one and only mayo!", e2, this.getClass());
+                        errorFrame.writeError("Unable to upload image.", e2, this.getClass());
                     }
                     frame.dispose();
                 }

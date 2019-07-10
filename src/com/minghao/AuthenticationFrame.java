@@ -200,7 +200,7 @@ class AuthenticationFrame extends JFrame {
                     add(invalid);
                     this.repaint();
                     invalid.setVisible(true);
-                    errorFrame.writeError("The user has enter an invalid password, if you do not have an username or password; please contact the one and only mayo", e1, this.getClass());
+                    errorFrame.writeError("The user has enter an invalid username and password, if you do not have an username or password", e1, this.getClass());
                 }
             }
         }

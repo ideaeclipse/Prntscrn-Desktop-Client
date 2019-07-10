@@ -64,8 +64,7 @@ public class Main {
         try {
             new Main();
         } catch (NativeHookException e) {
-            errorFrame.writeError("Couldn't register native hook, please contact the one and only mayo", e, Main.class);
-            System.out.println("Couldn't register native hook");
+            errorFrame.writeError("Couldn't register native hook.", e, Main.class);
         }
     }
 
@@ -76,7 +75,7 @@ public class Main {
      * <p>
      * If everything is ok the program will start up as normal.
      * <p>
-     * If you are prompted to relogin the tokenText.txt file will be repopulated with the token received from the login request
+     * If you are prompted to re-login the tokenText.txt file will be repopulated with the token received from the login request
      *
      * @return response must be 200 to pass the case in {@link Main#Main()} otherwise you will be prompted to re login
      */
@@ -87,7 +86,7 @@ public class Main {
                 HttpRequests con = new HttpRequests();
                 return con.testToken("auth_test", token);
             } catch (IOException e) {
-                errorFrame.writeError("One of two following error has occurred: You don't have permission to open the tokenText.txt file, or the connection to the REST services has failed please contact the one and only mayo", e, this.getClass());
+                errorFrame.writeError("One of two following error has occurred: You don't have permission to open the tokenText.txt file, or the connection to the REST services has failed.", e, this.getClass());
             }
         }
         return 401;
@@ -171,10 +170,10 @@ public class Main {
                             else
                                 createFrame();
                         } catch (AWTException e) {
-                            errorFrame.writeError("The ROBOT has failed to capture a screenshot, please contact the one and only mayo", e, this.getClass());
+                            errorFrame.writeError("The ROBOT has failed to capture a screenshot", e, this.getClass());
                             System.exit(-1);
                         } catch (IOException e) {
-                            errorFrame.writeError("The connection to REST service has failed.  Please contact the one and only mayo", e, this.getClass());
+                            errorFrame.writeError("The connection to REST service has failed.", e, this.getClass());
                         }
                     }
                 } else if (nativeKeyEvent.getKeyCode() == 1) {
