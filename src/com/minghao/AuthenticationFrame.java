@@ -32,9 +32,10 @@ class AuthenticationFrame extends JFrame {
     private String token;
 
     /**
-     * @param errorFrame passed instance of the errorframe
+     * @param errorFrame passed instance of the errorFrame
      */
     AuthenticationFrame(final ErrorFrame errorFrame) {
+        // Frame information
         super("Login");
         this.errorFrame = errorFrame;
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -114,7 +115,7 @@ class AuthenticationFrame extends JFrame {
                 @Override
                 public void keyPressed(KeyEvent e) {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER)
-                        test(parent);
+                        submit(parent);
                     if (userName.getText().equals("Username") && e.getKeyCode() != KeyEvent.VK_ENTER)
                         userName.setText("");
                 }
@@ -139,7 +140,7 @@ class AuthenticationFrame extends JFrame {
                 @Override
                 public void keyPressed(KeyEvent e) {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER)
-                        test(parent);
+                        submit(parent);
                     if (userName.getText().equals("Username") && e.getKeyCode() != KeyEvent.VK_ENTER)
                         password.setText("");
 
@@ -158,12 +159,8 @@ class AuthenticationFrame extends JFrame {
             submit.setBounds(375, 205, 100, 35);
 
             //Notifies the synchronized lock when the token is gathered
-            submit.addActionListener(e -> {
-                test(parent);
-            });
-
+            submit.addActionListener(e -> submit(parent));
             this.add(submit);
-
 
             // Register button
             JButton register = new JButton("Register");
@@ -175,8 +172,12 @@ class AuthenticationFrame extends JFrame {
             this.add(register);
         }
 
-
-        void test(final JFrame parent) {
+        /**
+         * When user submit the information
+         *
+         * @param parent Parent instance
+         */
+        void submit(final JFrame parent) {
             try {
                 String userName = getUserNameText();
                 String password = getPasswordText();
